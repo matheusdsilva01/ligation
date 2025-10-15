@@ -17,7 +17,7 @@ const matrix = [
 // `var E` é a posição da minha jogada
 
 // INDICES!!!
-var E = {
+const E = {
     row: 2,
     col: 2
 }
@@ -36,7 +36,7 @@ const elementsLeft = matrix[E.row].slice(E.col - 2 < 0 ? 0 : E.col - 2, E.col + 
 console.log('[LEFT]', elementsLeft)
 
 // retorna os elementos acima, o valor de i no laço será a linha de E
-let elementsUp = []
+const elementsUp = []
 for (let i = E.row; i > E.row - 3; i--) {
     const row = matrix[i]
     if (row) {
@@ -46,7 +46,7 @@ for (let i = E.row; i > E.row - 3; i--) {
 console.log('[UP]', elementsUp)
 
 // retorna os elementos abaixo, o valor de i no laço será a linha de E aqui --
-let elementsDown = []
+const elementsDown = []
 for (let i = E.row; i < E.row + 3; i++) {
     const row = matrix[i]
     if (row) {
@@ -57,14 +57,14 @@ console.log('[DOWN]', elementsDown)
 
 console.log('------------aa')
 // retorna os elementos na diagonal superior direita(pqp) subtrair 2 da row e na col da uma adição
-let diagonalUpRight = [matrix[E.row][E.col]]
-let rowsUpRight = [E.row - 1, E.row - 2]
+const diagonalUpRight = [matrix[E.row][E.col]]
+const rowsUpRight = [E.row - 1, E.row - 2]
 rowsUpRight.forEach((el, i) => {
     if (el < 0) {
         return
     }
     // E + i + 1
-    var curr = matrix[el][E.col + i + 1] // ADICIONAR E
+    const curr = matrix[el][E.col + i + 1] // ADICIONAR E
     if (curr) {
         diagonalUpRight.push(curr) 
     }
@@ -72,14 +72,14 @@ rowsUpRight.forEach((el, i) => {
 console.log('[UP-RIGHT]', diagonalUpRight)
 
 // retorna os elementos na diagonal superior esquerda(pqp de novo) subtrair 2 da row e na col da uma subtração
-let diagonalUpLeft = [matrix[E.row][E.col]]
-let rowsUpLeft = [E.row - 1, E.row - 2]
+const diagonalUpLeft = [matrix[E.row][E.col]]
+const rowsUpLeft = [E.row - 1, E.row - 2]
 rowsUpLeft.forEach((el, i) => {
     if (el < 0) {
         return
     }
     // E - i + 1
-    var curr = matrix[el][E.col - (i + 1)] // SUBTRAI DE E
+    const curr = matrix[el][E.col - (i + 1)] // SUBTRAI DE E
     if (curr) {
         diagonalUpLeft.push(curr) 
     }
@@ -87,14 +87,14 @@ rowsUpLeft.forEach((el, i) => {
 console.log('[UP-LEFT]', diagonalUpLeft)
 
 // retorna os elementos na diagonal inferior direita(pqp again) adiciona 2 da row e na col da uma adição
-let diagonalDownRight = [matrix[E.row][E.col]]
-let rowsDownRight = [E.row + 1, E.row + 2]
+const diagonalDownRight = [matrix[E.row][E.col]]
+const rowsDownRight = [E.row + 1, E.row + 2]
 rowsDownRight.forEach((el, i) => {
     // E - i + 1
     if (el >= matrix.length) {
         return
     }
-    var curr = matrix[el][E.col + (i + 1)] // ADICIONA DE E
+    const curr = matrix[el][E.col + (i + 1)] // ADICIONA DE E
     if (curr) {
         diagonalDownRight.push(curr) 
     }
@@ -102,14 +102,14 @@ rowsDownRight.forEach((el, i) => {
 console.log('[DOWN-RIGHT]', diagonalDownRight)
 
 // retorna os elementos na diagonal inferior esquerda(pqp fds) adiciona 2 da row e na col da uma subtração
-let diagonalDownLeft = [matrix[E.row][E.col]]
-let rowsDownLeft = [E.row + 1, E.row + 2]
+const diagonalDownLeft = [matrix[E.row][E.col]]
+const rowsDownLeft = [E.row + 1, E.row + 2]
 rowsDownLeft.forEach((el, i) => {
     // E - i + 1
     if (el >= matrix.length) {
         return
     }
-    var curr = matrix[el][E.col - (i + 1)] // ADICIONA DE E
+    const curr = matrix[el][E.col - (i + 1)] // ADICIONA DE E
     if (curr) {
         diagonalDownLeft.push(curr) 
     }

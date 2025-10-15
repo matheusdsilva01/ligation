@@ -1,25 +1,42 @@
+import { ChevronDownIcon, CircleIcon, XIcon } from "lucide-react"
 import { Activity, useState } from "react"
 
+const empty: Cell = {
+  value: 0,
+  player: undefined
+}
+
+type Player = "p1" | "p2"
+
+type Cell = {
+  value: number
+  player?: Player
+}
+
 const startGame = [
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0]
+    [empty, empty, empty, empty, empty],
+    [empty, empty, empty, empty, empty],
+    [empty, empty, empty, empty, empty],
+    [empty, empty, empty, empty, empty],
+    [empty, empty, empty, empty, empty]
 ]
 
 function App() {
   const [matrix, setState] = useState(startGame)
   const [hasWin, setWasWin] = useState(false)
+  const [player, setPlayer] = useState<Player>("p1")
 
   function play(col: number) {
     for (let rowIndex = matrix.length - 1; rowIndex >= 0; rowIndex--) {
 
-      if (matrix[rowIndex][col] === 0) {
+      if (matrix[rowIndex][col].value === 0) {
         setState(prev => {
           const updatedState = [...prev]
           const updatedRow = updatedState[rowIndex]
-          updatedRow[col] = 1
+          updatedRow[col] = {
+            value: 1,
+            player
+          }
           updatedState[rowIndex] = updatedRow
           return updatedState
         })
@@ -29,14 +46,18 @@ function App() {
     }
   }
 
+  function changePlayer() {
+    setPlayer(prev => prev === "p1" ? "p2" : "p1")
+  }
+
   function checkWinner(r: number, c: number) {
     const E = {
       row: r,
       col: c
     }
 
-    function assertCombinationLine(el: number) {
-      return !!el && el === 1
+    function assertCombinationLine(el: Cell) {
+      return !!el && el.value === 1 && el.player === player
     }
 
     const elementsRight = matrix[E.row].slice(E.col, E.col + 3)
@@ -124,35 +145,60 @@ function App() {
     })
     if (assert) {
       setWasWin(true)
+    } else {
+      changePlayer()
     }
   }
 
+  function reset() {
+    setState(startGame)
+    setWasWin(false)
+    setPlayer("p1")
+  }
+
   return (
-    <section className="max-w-sm border border-red-500 p-4 mx-auto">
+    <>
       <Activity mode={hasWin? "visible": "hidden"}>
-        <p>gg</p>
+        <section className="max-w-sm p-4 mx-auto bg-white flex flex-col gap-y-4 text-center text-black">
+          <p>O jogador {player} venceu!</p>
+          <button onClick={reset} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors cursor-pointer">Reiniciar</button>
+        </section>
       </Activity>
-      <div className="flex justify-between mb-10">
-          <button onClick={() => play(0)} className="cursor-pointer rounded-full bg-purple-500 size-4"></button>
-          <button onClick={() => play(1)} className="cursor-pointer rounded-full bg-purple-500 size-4"></button>
-          <button onClick={() => play(2)} className="cursor-pointer rounded-full bg-purple-500 size-4"></button>
-          <button onClick={() => play(3)} className="cursor-pointer rounded-full bg-purple-500 size-4"></button>
-          <button onClick={() => play(4)} className="cursor-pointer rounded-full bg-purple-500 size-4"></button>
-      </div>
-        <div className="flex flex-col gap-y-4">
-          {matrix.map((cells, i) => (
-              // row
-              <div key={'row-'+i} className="flex justify-between">
-                {/* cells */}
-                {cells.map((cell, j) => (
-                  <div key={'row-'+i+',col'+j} className="rounded-full bg-green-500 flex text-center size-8">
-                    {cell === 1 && <span className="block size-4 rounded-full bg-red-500 m-auto"></span>}
-                  </div>
-                ))}
-              </div>
+      <section className="max-w-sm border border-red-500 p-4 mx-auto">
+        {!hasWin && (
+          <div className="mb-10">
+            <h2>
+              Vez de <span className="font-bold uppercase">{player}</span>
+            </h2>
+          </div>
+        )}
+        <div className="flex justify-between mb-10">
+          {Array.from({length: 5}).map((_, i) => (
+            <button disabled={hasWin} key={i} onClick={() => play(i)} className="cursor-pointer rounded-full bg-purple-500 size-8 p-1 disabled:opacity-50 disabled:cursor-not-allowed">
+              <ChevronDownIcon className="size-full" />
+            </button>
           ))}
         </div>
-    </section>
+          <div className="flex flex-col gap-y-4">
+            {matrix.map((cells, i) => (
+                // row
+                <div key={'row-'+i} className="flex justify-between">
+                  {/* cells */}
+                  {cells.map((cell, j) => (
+                    <div key={'row-'+i+',col'+j} className="rounded-full border-2 border-cyan-500 flex text-center size-8">
+                      {cell.value === 1 && (cell.player === "p1"
+                        ? (
+                          <XIcon className="m-auto text-purple-500 bg-purple-100 rounded-full size-full" />
+                        ) : (
+                          <CircleIcon className="m-auto text-orange-500 bg-orange-100 size-full rounded-full" />
+                        ))}
+                    </div>
+                  ))}
+                </div>
+            ))}
+          </div>
+      </section>
+    </>
   )
 }
 
