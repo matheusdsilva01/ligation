@@ -3,14 +3,14 @@ import { Activity, useState } from "react"
 
 const empty: Cell = {
   value: 0,
-  player: undefined
+  player: null
 }
 
 type Player = "p1" | "p2"
 
 type Cell = {
   value: number
-  player?: Player
+  player: Player | null
 }
 
 const startGame = [
@@ -157,48 +157,99 @@ function App() {
   }
 
   return (
-    <>
-      <Activity mode={hasWin? "visible": "hidden"}>
-        <section className="max-w-sm p-4 mx-auto bg-white flex flex-col gap-y-4 text-center text-black">
-          <p>O jogador {player} venceu!</p>
-          <button onClick={reset} className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-200 transition-colors cursor-pointer">Reiniciar</button>
-        </section>
-      </Activity>
-      <section className="max-w-sm border border-red-500 p-4 mx-auto">
-        {!hasWin && (
-          <div className="mb-10">
-            <h2>
-              Vez de <span className="font-bold uppercase">{player}</span>
-            </h2>
-          </div>
-        )}
-        <div className="flex justify-between mb-10">
-          {Array.from({length: 5}).map((_, i) => (
-            <button disabled={hasWin} key={i} onClick={() => play(i)} className="cursor-pointer rounded-full bg-purple-500 size-8 p-1 disabled:opacity-50 disabled:cursor-not-allowed">
-              <ChevronDownIcon className="size-full" />
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <Activity mode={hasWin ? "visible" : "hidden"}>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <section className="max-w-md w-full p-8 bg-white rounded-2xl flex flex-col gap-y-6 text-center border animate-fade-in">
+            <img src="https://cdn.betterttv.net/emote/55b6f480e66682f576dd94f5/3x.webp" className="size-16 mx-auto" />
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Parabéns!</h2>
+              <p className="text-lg text-gray-600">
+                Jogador <span className="font-bold text-purple-600 uppercase">{player}</span> venceu!
+              </p>
+            </div>
+            <button 
+              onClick={reset} 
+              className="bg-purple-600 px-6 py-3 rounded-xl font-semibold hover:bg-purple-700 transition-all"
+            >
+              Jogar Novamente
             </button>
-          ))}
+          </section>
         </div>
-          <div className="flex flex-col gap-y-4">
-            {matrix.map((cells, i) => (
-                // row
-                <div key={'row-'+i} className="flex justify-between">
-                  {/* cells */}
+      </Activity>
+
+      <section className="w-full max-w-xl">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-orange-400 mb-2">
+            Ligue 3
+          </h1>
+          <p className="text-gray-400 text-sm">Conecte 3 peças para vencer!</p>
+        </div>
+
+        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl p-8 border border-gray-700">
+          {!hasWin && (
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-3 bg-gray-700/50 px-6 py-3 rounded-full border border-gray-600">
+                <div className={`size-3 rounded-full ${player === "p1" ? "bg-purple-500" : "bg-orange-500"}`}></div>
+                <h2 className="text-lg font-medium">
+                  Vez do Jogador <span className={`font-bold uppercase ${player === "p1" ? "text-purple-400" : "text-orange-400"}`}>{player}</span>
+                </h2>
+              </div>
+            </div>
+          )}
+
+          <div className="flex justify-between gap-3 mb-6 px-6">
+            {Array.from({length: 5}).map((_, i) => (
+              <button 
+                disabled={hasWin} 
+                key={i} 
+                onClick={() => play(i)} 
+                className="group cursor-pointer rounded-full bg-purple-500 hover:bg-purple-400 size-12 p-2 disabled:opacity-30 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-purple-500/50 flex items-center justify-center"
+              >
+                <ChevronDownIcon className="size-full text-white group-hover:animate-bounce" />
+              </button>
+            ))}
+          </div>
+
+          <div className="bg-blue-900/40 rounded-2xl p-6 border-2 border-blue-800">
+            <div className="flex flex-col gap-3">
+              {matrix.map((cells, i) => (
+                <div key={'row-'+i} className="flex justify-between gap-3">
                   {cells.map((cell, j) => (
-                    <div key={'row-'+i+',col'+j} className="rounded-full border-2 border-cyan-500 flex text-center size-8">
+                    <div 
+                      key={'row-'+i+',col'+j} 
+                      className="rounded-full border-4 border-blue-700/60 bg-blue-950/60 flex items-center justify-center size-12 transition-all"
+                    >
                       {cell.value === 1 && (cell.player === "p1"
                         ? (
-                          <XIcon className="m-auto text-purple-500 bg-purple-100 rounded-full size-full" />
+                          <div>
+                            <XIcon className="size-10 text-purple-400 bg-purple-900/40 rounded-full p-1" strokeWidth={3} />
+                          </div>
                         ) : (
-                          <CircleIcon className="m-auto text-orange-500 bg-orange-100 size-full rounded-full" />
+                          <div>
+                            <CircleIcon className="size-10 text-orange-400 bg-orange-900/40 rounded-full p-1" strokeWidth={3} />
+                          </div>
                         ))}
                     </div>
                   ))}
                 </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          <div className="flex justify-center gap-8 mt-6">
+            <div className="flex items-center gap-2">
+              <XIcon className="size-6 text-purple-400" strokeWidth={3} />
+              <span className="text-sm text-gray-400">Jogador P1</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <CircleIcon className="size-6 text-orange-400" strokeWidth={3} />
+              <span className="text-sm text-gray-400">Jogador P2</span>
+            </div>
+          </div>
+        </div>
       </section>
-    </>
+    </div>
   )
 }
 
