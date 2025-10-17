@@ -1,160 +1,16 @@
 import { ChevronDownIcon, CircleIcon, XIcon } from "lucide-react"
-import { useState } from "react"
-
-const empty: Cell = {
-  value: 0,
-  player: null
-}
-
-type Player = "p1" | "p2"
-
-type Cell = {
-  value: number
-  player: Player | null
-}
-
+import { useGameReducer } from "./hooks/useGameReducer"
 
 function App() {
-  const startGame = [
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty],
-      [empty, empty, empty, empty, empty]
-  ]
-  const [matrix, setMatrix] = useState(startGame)
-  const [hasWin, setWasWin] = useState(false)
-  const [player, setPlayer] = useState<Player>("p1")
-
+  const [state, dispatch] = useGameReducer()
+  const { matrix, hasWin, player } = state
+  
   function play(col: number) {
-    let lastEmptyRowIndex = -1
-    for (let rowIndex = matrix.length - 1; rowIndex >= 0; rowIndex--) {
-
-      if (matrix[rowIndex][col].value === 0) {
-        lastEmptyRowIndex = rowIndex
-        break
-      }
-    }
-    const updatedMatrix = matrix
-    const updatedRow = updatedMatrix[lastEmptyRowIndex]
-    updatedRow[col] = {
-      value: 1,
-      player
-    }
-
-    setMatrix(updatedMatrix)
-    checkWinner(lastEmptyRowIndex, col)
-  }
-
-  function switchPlayer() {
-    setPlayer(prev => prev === "p1" ? "p2" : "p1")
-  }
-
-  function checkWinner(r: number, c: number) {
-    const E = {
-      row: r,
-      col: c
-    }
-
-    function assertCombinationLine(el: Cell) {
-      return !!el && el.value === 1 && el.player === player
-    }
-
-    const elementsRight = matrix[E.row].slice(E.col, E.col + 3)
-
-    const elementsLeft = matrix[E.row].slice(E.col - 2 < 0 ? 0 : E.col - 2, E.col + 1)
-
-    const elementsUp = []
-    for (let i = E.row; i > E.row - 3; i--) {
-        const row = matrix[i]
-        if (row) {
-            elementsUp.push(row[E.col])
-        }
-    }
-
-    const elementsDown = []
-    for (let i = E.row; i < E.row + 3; i++) {
-        const row = matrix[i]
-        if (row) {
-            elementsDown.push(row[E.col])
-        }
-    }
-
-    const diagonalUpRight = [matrix[E.row][E.col]]
-    const rowsUpRight = [E.row - 1, E.row - 2]
-    rowsUpRight.forEach((el, i) => {
-        if (el < 0) {
-            return
-        }
-
-        const curr = matrix[el][E.col + i + 1]
-        if (curr) {
-            diagonalUpRight.push(curr) 
-        }
-    })
-
-    const diagonalUpLeft = [matrix[E.row][E.col]]
-    const rowsUpLeft = [E.row - 1, E.row - 2]
-    rowsUpLeft.forEach((el, i) => {
-        if (el < 0) {
-            return
-        }
-
-        const curr = matrix[el][E.col - (i + 1)]
-        if (curr) {
-            diagonalUpLeft.push(curr) 
-        }
-    })
-
-    const diagonalDownRight = [matrix[E.row][E.col]]
-    const rowsDownRight = [E.row + 1, E.row + 2]
-    rowsDownRight.forEach((el, i) => {
-        if (el >= matrix.length) {
-            return
-        }
-        const curr = matrix[el][E.col + (i + 1)]
-        if (curr) {
-            diagonalDownRight.push(curr) 
-        }
-    })
-
-    const diagonalDownLeft = [matrix[E.row][E.col]]
-    const rowsDownLeft = [E.row + 1, E.row + 2]
-    rowsDownLeft.forEach((el, i) => {
-        if (el >= matrix.length) {
-            return
-        }
-        const curr = matrix[el][E.col - (i + 1)]
-        if (curr) {
-            diagonalDownLeft.push(curr) 
-        }
-    })
-    const middleX = [matrix[E.row][E.col - 1], matrix[E.row][E.col], matrix[E.row][E.col + 1]]
-    const middleDiagonalLeft = [matrix[E.row - 1]?.[E.col - 1], matrix[E.row][E.col], matrix[E.row + 1]?.[E.col + 1]]
-    const middleDiagonalRight = [matrix[E.row - 1]?.[E.col + 1], matrix[E.row][E.col], matrix[E.row + 1]?.[E.col - 1]]
-
-    const possibilities = [middleX, middleDiagonalLeft, middleDiagonalRight, elementsRight, diagonalDownRight, elementsDown, diagonalDownLeft, elementsLeft, diagonalUpLeft, elementsUp, diagonalUpRight]
-
-    const assert = possibilities.find(el => {
-        if (el.length < 3) {
-            return false
-        }
-        const assert = el.every(assertCombinationLine)
-
-        return assert
-    })
-
-    if (assert) {
-      setWasWin(true)
-    } else {
-      switchPlayer()
-    }
+    dispatch({ type: 'PLAY', col })
   }
 
   function reset() {
-    setMatrix(startGame)
-    setWasWin(false)
-    setPlayer("p1")
+    dispatch({ type: 'RESET' })
   }
 
   return (
@@ -212,9 +68,9 @@ function App() {
 
           <div className="bg-blue-900/40 rounded-2xl py-6 px-4 md:px-6 border-blue-800">
             <div className="flex flex-col gap-3">
-              {matrix.map((cells, i) => (
+              {matrix.map((row, i) => (
                 <div key={'row-'+i} className="flex justify-between gap-3">
-                  {cells.map((cell, j) => (
+                  {row.map((cell, j) => (
                     <div 
                       key={'row-'+i+',col'+j} 
                       className="rounded-full border-3 md:border-4 border-blue-700/60 bg-blue-950/60 flex items-center justify-center size-(--cell-size) transition-all"
