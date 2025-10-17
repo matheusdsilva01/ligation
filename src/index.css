@@ -1,8 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-    --animate-fade-in: fade-in 0.5s ease-in-out;
-    --animate-bounce-complex: bounce-complex .8s ease-in;
+    --animate-bounce-complex: bounce-complex 8s ease-in;
 
     @keyframes bounce-complex {
         0% {
@@ -12,22 +11,11 @@
                     -1 * 
                     (
                         ((var(--spacing) * 3) * (var(--number-cells-before) - 1)) + /* number of line gap */
-                        ((var(--spacing) * 12) * var(--number-cells-before)) + /* get the number of cells */
+                        (var(--cell-size) * var(--number-cells-before)) + /* get the number of cells */
                         (var(--spacing) * 6 * 2) /* get the padding and margin */
                     )
                 )
             );
-        }
-    }
-
-    @keyframes fade-in {
-        0% {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
         }
     }
 }
