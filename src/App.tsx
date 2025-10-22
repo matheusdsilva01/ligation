@@ -1,4 +1,4 @@
-import { ChevronDownIcon, CircleIcon, XIcon } from "lucide-react"
+import { ChevronDownIcon, CircleIcon, Github, XIcon } from "lucide-react"
 import { useGameReducer } from "./hooks/useGameReducer"
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="min-h-screen flex items-center justify-center md:p-4">
-      <section className="w-full max-w-xl">
+      <section className="w-full max-w-xl flex flex-col">
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
             Ligue 3
@@ -116,6 +116,17 @@ function App() {
             </div>
           </div>
         </div>
+        <section className="mx-auto mt-2">
+          <a
+            href="https://github.com/matheusdsilva01/ligation"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-gray-300 transition-all"
+          >
+            Link para o código do projeto
+            <Github className="inline size-5 ml-2" />
+          </a>
+        </section>
       </section>
     </div>
   )
