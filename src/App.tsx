@@ -1,4 +1,4 @@
-import { CircleIcon, Github, XIcon } from "lucide-react"
+import { Github } from "lucide-react"
 import Board from "./components/board"
 import { HeaderActions } from "./components/header"
 import { GameProvider } from "./context/gameProvider"
