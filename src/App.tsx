@@ -10,9 +10,9 @@ function App() {
         <section className="w-full max-w-xl flex flex-col">
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold text-purple-400 mb-2">
-              Ligue 3
+              Ligue 4
             </h1>
-            <p className="text-gray-400 text-sm">Conecte 3 peças para vencer!</p>
+            <p className="text-gray-400 text-sm">Conecte 4 peças para vencer!</p>
           </div>
 
           <div className="bg-gray-900 rounded-3xl shadow-2xl p-2 md:p-8 border border-gray-700">

@@ -1,5 +1,5 @@
 import { createContext, type ActionDispatch } from "react";
-import type { Action, State } from "../hooks/useGameReducer";
+import type { State, Action } from "../lib/game-logic";
 
 export const GameContext = createContext<State>({} as State);
 

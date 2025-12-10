@@ -9,7 +9,7 @@ export default function Board() {
   return (
     <section className="[--cell-size:calc(var(--spacing)*9)] md:[--cell-size:calc(var(--spacing)*12)]">
       <div className="flex justify-between gap-3 mb-6 px-4 md:px-6 z-10 relative">
-        {Array.from({length: 5}).map((_, i) => (
+        {Array.from({length: 7}).map((_, i) => (
           <button 
             disabled={hasWin} 
             key={i} 
