@@ -56,7 +56,7 @@ function checkWinner(state: Omit<State, 'hasWin'>): boolean {
     
                     const xWindow = matrix[row].slice(colStart, colEnd);
     
-                    if (assert(xWindow, player)) {
+                    if (xWindow.length === 4 && assert(xWindow, player)) {
                         return true
                     }
             }
@@ -64,7 +64,7 @@ function checkWinner(state: Omit<State, 'hasWin'>): boolean {
             if (i < 3) {
                 for (let j = 0; j < 7; j++) {
                     const yWindow = [matrix[i][j], matrix[i + 1][j], matrix[i + 2][j], matrix[i + 3][j]]
-                    if (assert(yWindow, player)) {
+                    if (yWindow.length === 4 && assert(yWindow, player)) {
                         return true
                     }
                 }
@@ -100,7 +100,7 @@ function checkWinner(state: Omit<State, 'hasWin'>): boolean {
                     matrix[zRef + (5 - i) + 2][(6 - zRef) - 2],
                     matrix[zRef + (5 - i) + 3][(6 - zRef) - 3],
                 ]
-    
+
                 if (
                     assert(diagonalReverse, player) ||
                     assert(normalDiagonalUp, player) ||
