@@ -1,31 +1,122 @@
 @import "tailwindcss";
 
 @theme {
-    --animate-bounce-complex: bounce-complex 8s ease-in;
+    --color-ink: #080b18;
+    --color-cabinet: #202640;
+    --color-screen: #11172a;
+    --color-board: #3157c8;
+    --color-slot: #10182d;
+    --color-cream: #fff8dd;
+    --color-coral: #ff6652;
+    --color-gold: #ffc83d;
+    --font-display: "Arial Black", "Helvetica Neue", sans-serif;
+    --font-mono: "Courier New", Courier, monospace;
+}
 
-        @keyframes bounce {
-        50% {
-            transform: translateY(-25%);
-            animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-        }
-        0%, 100% {
-            transform: none;
-            animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-        }
+@layer base {
+    :root {
+        color-scheme: dark;
     }
-    @keyframes bounce-complex {
-        0% {
-            transform: translateY(
-                /* transform to negative */
-                calc(
-                    -1 * 
-                    (
-                        ((var(--spacing) * 3) * (var(--number-cells-before) - 1)) + /* number of line gap */
-                        (var(--cell-size) * var(--number-cells-before)) + /* get the number of cells */
-                        (var(--spacing) * 6 * 2) /* get the padding and margin */
-                    )
-                )
-            );
-        }
+
+    html {
+        background: var(--color-ink);
+        overflow-x: clip;
+    }
+
+    body {
+        min-height: 100vh;
+        margin: 0;
+        background: var(--color-ink);
+        overflow-x: clip;
+        text-rendering: optimizeLegibility;
+    }
+
+    button,
+    a {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    ::selection {
+        color: var(--color-ink);
+        background: var(--color-gold);
+    }
+}
+
+.retro-grid {
+    background-color: var(--color-ink);
+    background-image:
+        linear-gradient(rgba(255, 248, 221, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 248, 221, 0.035) 1px, transparent 1px),
+        radial-gradient(circle at 50% 20%, #252c54 0, var(--color-ink) 58%);
+    background-size: 28px 28px, 28px 28px, 100% 100%;
+}
+
+.cabinet-panel {
+    box-shadow:
+        0 8px 0 #111528,
+        0 12px 0 var(--color-ink),
+        0 28px 70px rgba(0, 0, 0, 0.45),
+        inset 0 0 0 2px rgba(255, 248, 221, 0.08);
+}
+
+.board-shell {
+    box-shadow:
+        inset 0 0 0 3px rgba(255, 248, 221, 0.12),
+        inset 0 -8px 0 rgba(8, 11, 24, 0.25),
+        0 6px 0 var(--color-ink);
+}
+
+.slot {
+    box-shadow:
+        inset 0 5px 8px rgba(0, 0, 0, 0.75),
+        0 2px 0 rgba(255, 248, 221, 0.15);
+}
+
+.token {
+    box-shadow:
+        inset 0 4px 0 rgba(255, 255, 255, 0.28),
+        inset 0 -5px 0 rgba(8, 11, 24, 0.2),
+        0 3px 0 var(--color-ink);
+}
+
+.status-light {
+    box-shadow: 0 0 16px currentColor;
+    animation: status-pulse 1.7s ease-in-out infinite;
+}
+
+.token-drop {
+    animation: token-drop calc(260ms + var(--drop-rows) * 55ms) cubic-bezier(0.28, 0.84, 0.42, 1);
+}
+
+@keyframes token-drop {
+    0% {
+        transform: translateY(calc(-1 * var(--drop-rows) * (100% + 0.625rem)));
+    }
+    72% {
+        transform: translateY(7%);
+    }
+    88% {
+        transform: translateY(-3%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes status-pulse {
+    50% {
+        opacity: 0.62;
+        transform: scale(0.86);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
