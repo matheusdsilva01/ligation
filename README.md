@@ -1,6 +1,6 @@
-# 🎮 Ligation 4(3 no momento hehe 😅)
+# 🎮 Ligation 4
 
-Um MiniGame simples chamado Ligation onde o objetivo é ligar 3 peças do mesmo jogador na mesma direção, seja horizontal, vertical ou diagonal, onde cada jogada só pode ser feita na ultima linha disponível da coluna escolhida.
+Um MiniGame simples chamado Ligation onde o objetivo é ligar 4 peças do mesmo jogador na mesma direção, seja horizontal, vertical ou diagonal, onde cada jogada só pode ser feita na ultima linha disponível da coluna escolhida.
 
 Me inspirei a criar esse projeto depois de assistir o jogo Road96 que tem esse MiniGame em sua história e achei um bom desafio 'recriar' em um projeto web.
 
